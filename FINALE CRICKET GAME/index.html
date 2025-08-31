@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Project Bat Ball</title>
+  <link rel="stylesheet" href="cricket.css">
+  <style>
+   
+  </style>
+</head>
+<body>
+  <h1>Bat Ball Stump Game</h1>
+
+  
+
+  <!-- Bat Button -->
+  <button class="choice-button" onclick="
+     var computerChoice = generateComputerChoice();
+     var resultMsg = getResult('Bat',computerChoice);
+    showResult('Bat',computerChoice,resultMsg)
+    "><img src="Images/bat.png" alt="Bat Image" class="choice-image">
+    </button>
+
+  <!-- Ball Button -->
+  <button class="choice-button" onclick="
+     var computerChoice = generateComputerChoice();
+
+     var resultMsg = getResult('Ball',computerChoice);
+    showResult('Ball',computerChoice,resultMsg);
+    "><img src="Images/ball.png" alt="Ball Image" class="choice-image"></button>
+
+  <!-- Stump Button -->
+   <button class="choice-button" onclick="
+     var computerChoice = generateComputerChoice();
+
+     var resultMsg = getResult('Stump',computerChoice);
+    showResult('Stump',computerChoice,resultMsg);
+     "><img src="Images/stump.png" alt="stump Image" class="choice-image"></button>
+
+
+  
+
+  <h3 id = "user-move"></h3>
+  <h3 id = "computer-move"></h3>
+  <h3 id = "result"></h3>
+  <h3 id = "score"></h3>
+
+
+
+  <button onclick="localStorage.clear()
+  resetScore();
+  ">Reset</button>
+
+  <script>
+    let scoreStr = localStorage.getItem('Score'); // RESSET BUTTON QUERY
+    let score;
+    resetScore(scoreStr);
+ 
+    function resetScore(scoreStr){
+      score = scoreStr ? JSON.parse(scoreStr) : {
+
+      win : 0,
+      loss : 0,
+      tie : 0,
+    };
+
+
+    score.displayScore = function() {
+        return `Score: WON:${score.win},  LOST:${score.loss},  TIED:${score.tie}`;
+      };
+
+      showResult();
+    }
+ 
+
+    function generateComputerChoice() {
+      let randomNumber = Math.random() * 3;
+      if (randomNumber > 0 && randomNumber <= 1) {
+        return 'Bat';
+      } else if (randomNumber > 1 && randomNumber <= 2) {
+        return 'Ball';
+      } else {
+        return 'Stump';
+      }
+    }
+
+
+    function getResult(userMove,computerMove){
+    if(userMove ==='Bat') {
+      if (computerMove === 'Ball') {
+        score.win = score.win + 1;
+      return 'You have Won';
+    } else if (computerMove === 'Bat') {
+      score.tie++;
+      return `It's a tie`;
+    } else if (computerMove === 'Stump') {
+      score.loss++;
+      return 'Computer has won';
+    }
+    } else if(userMove === 'Ball'){
+        
+    if (computerMove === 'Ball') {
+      score.tie++;
+      return  `It's a tie`;
+    } else if (computerMove === 'Bat') {
+       score.loss++;
+      return  'Computer has won';
+    } else if (computerMove === 'Stump') {
+      score.win = score.win + 1;
+     return 'You have Won' ;
+    }
+    }else{
+      
+    if (computerMove === 'Ball') {
+       score.loss++;
+      return 'Computer has won';
+    } else if (computerMove === 'Bat') {
+      score.win = score.win + 1; // or score.win++;
+      return 'You have Won';
+    } else if (computerMove === 'Stump') {
+      score.tie++;
+      return `It's a tie`;
+    }
+
+
+    }
+    
+    }
+
+
+    function showResult(userMove,computerMove,result){
+      localStorage.setItem('Score',JSON.stringify(score));
+
+
+      document.querySelector('#user-move').innerText = userMove  ? `You have chosen ${userMove}`: '' ;  // WE CAN DO LIKE THIS OR AS IN THE LOWER TWO
+
+
+       document.querySelector('#computer-move').innerText = userMove !== undefined ? `Computer chosen ${computerMove}`: '' ;
+
+
+        // document.querySelector('#result').innerText = result !== undefined ? result : '' ;  // THIS CAN BE USED OR THE BELOW ONE
+
+        document.querySelector('#result').innerText = result  || '' ;
+
+
+         document.querySelector('#score').innerText = score.displayScore();
+    }
+
+
+
+
+    //   alert(`You have chosen ${userMove}. Computer chose ${computerMove}  and  
+      
+    //                      ${result}
+
+      
+    //   ${score.displayScore()}`);
+    // }
+  </script>
+</body>
+</html>
